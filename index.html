@@ -51,6 +51,43 @@ max-width: 260px;
 }
 .dl { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #FF6B00, transparent); }
 
+/* Audio player */
+.audio-wrap {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+margin-bottom: 18px;
+}
+
+#play-btn {
+background: linear-gradient(135deg, #FF6B00, #cc5200);
+color: #fff;
+border: none;
+border-radius: 50px;
+padding: 8px 20px;
+font-family: ‘Arial Black’, Arial, sans-serif;
+font-weight: 900;
+font-size: 11px;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+cursor: pointer;
+transition: transform 0.15s, box-shadow 0.15s;
+box-shadow: 0 0 14px rgba(255,107,0,0.4);
+}
+#play-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,107,0,0.6); }
+#play-btn:active { transform: scale(0.97); }
+
+.track-label {
+font-size: 9px;
+color: rgba(255,255,255,0.25);
+letter-spacing: 1px;
+text-transform: uppercase;
+text-align: center;
+margin-bottom: 16px;
+margin-top: -10px;
+}
+
 /* Column headers */
 .col-h {
 display: grid;
@@ -62,7 +99,6 @@ font-weight: 700;
 letter-spacing: 1.5px;
 text-transform: uppercase;
 }
-
 .col-h span {
 text-align: center;
 cursor: pointer;
@@ -76,7 +112,6 @@ user-select: none;
 .col-h span.active-mens   { color: #6aabff; }
 .col-h span.active-womens { color: #ff8fab; }
 .col-h span.active-total  { color: #FFD700; }
-
 .sort-arrow { font-size: 8px; margin-left: 2px; opacity: 0.7; }
 
 /* Rows */
@@ -90,43 +125,25 @@ border: 1px solid rgba(255, 255, 255, 0.08);
 border-radius: 8px;
 margin-bottom: 5px;
 }
-
 .row.gold   { background-color: #1e1608; border-color: rgba(255, 215, 0, 0.45); }
 .row.silver { background-color: #161620; border-color: rgba(192, 192, 192, 0.35); }
 .row.bronze { background-color: #1a1208; border-color: rgba(205, 127, 50, 0.4); }
 
-.rnk {
-font-size: 16px;
-font-weight: 900;
-color: rgba(255, 255, 255, 0.35);
-text-align: center;
-}
+.rnk { font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.35); text-align: center; }
 .row.gold   .rnk { color: #FFD700; }
 .row.silver .rnk { color: #c0c0c0; }
 .row.bronze .rnk { color: #cd7f32; }
 
-.nm {
-font-size: 14px;
-font-weight: 700;
-color: #ffffff;
-padding-right: 6px;
-}
+.nm { font-size: 14px; font-weight: 700; color: #ffffff; padding-right: 6px; }
 
-.pts {
-text-align: center;
-font-size: 14px;
-font-weight: 900;
-color: #ffffff;
-}
+.pts { text-align: center; font-size: 14px; font-weight: 900; color: #ffffff; }
 .pts.m { color: #6aabff; }
 .pts.w { color: #ff8fab; }
 .pts.t { font-size: 16px; color: #ffffff; }
 .row.gold   .pts.t { color: #FFD700; }
 .row.silver .pts.t { color: #dddddd; }
 .row.bronze .pts.t { color: #cd7f32; }
-
-.pts.sort-active { opacity: 1; }
-.pts.sort-dim    { opacity: 0.35; }
+.pts.sort-dim { opacity: 0.35; }
 
 .sort-label {
 text-align: center;
@@ -163,6 +180,15 @@ text-transform: uppercase;
     </div>
   </div>
 
+  <!-- Audio Player -->
+
+<audio id="anthem" src="NCAA_Basketball_-_One_Shining_Moment_-_Luther_Vandross.mp3"></audio>
+
+  <div class="audio-wrap">
+    <button id="play-btn" onclick="togglePlay()">🎵 Play Anthem</button>
+  </div>
+  <div class="track-label">One Shining Moment — Luther Vandross</div>
+
   <div class="sort-label">Sorted by: <span id="sort-label-text">Combined Total</span></div>
 
   <div class="col-h">
@@ -180,6 +206,21 @@ text-transform: uppercase;
 </div>
 
 <script>
+  // Audio
+  function togglePlay() {
+    const a = document.getElementById('anthem');
+    const btn = document.getElementById('play-btn');
+    if (a.paused) {
+      a.play();
+      btn.textContent = '⏸ Pause Anthem';
+    } else {
+      a.pause();
+      btn.textContent = '🎵 Play Anthem';
+    }
+    a.onended = () => { btn.textContent = '🎵 Play Anthem'; };
+  }
+
+  // Standings
   const players = [
     { name: "Sarah",             m: 121, w: 122 },
     { name: "Patrick",           m: 101, w: 132 },
@@ -205,10 +246,7 @@ text-transform: uppercase;
   const podiumCls = ['gold','silver','bronze'];
   const labels    = { m: "Men's Bracket", w: "Women's Bracket", t: "Combined Total" };
 
-  function sortBy(key) {
-    currentSort = key;
-    render();
-  }
+  function sortBy(key) { currentSort = key; render(); }
 
   function render() {
     const sorted = [...players].sort((a, b) => {
@@ -217,12 +255,11 @@ text-transform: uppercase;
       if (currentSort === 'w') return b.w - a.w;
     });
 
-    // Update header styles & arrows
     ['m','w','t'].forEach(k => {
       const hdr = document.getElementById('hdr-' + k);
       const arr = document.getElementById('arr-' + k);
-      const activeClass = k === 'm' ? 'active-mens' : k === 'w' ? 'active-womens' : 'active-total';
-      hdr.className = currentSort === k ? activeClass : '';
+      const cls = k === 'm' ? 'active-mens' : k === 'w' ? 'active-womens' : 'active-total';
+      hdr.className = currentSort === k ? cls : '';
       arr.textContent = currentSort === k ? '▼' : '';
     });
 
@@ -233,18 +270,13 @@ text-transform: uppercase;
 
     sorted.forEach((p, i) => {
       const t = p.m + p.w;
-      const rowClass = i < 3 ? podiumCls[i] : '';
-      const rnk = i < 3 ? medals[i] : (i + 1);
-
-      // Dim non-active point columns to make the sort column pop
       const mDim = currentSort !== 'm' && currentSort !== 't' ? ' sort-dim' : '';
       const wDim = currentSort !== 'w' && currentSort !== 't' ? ' sort-dim' : '';
       const tDim = currentSort !== 't' ? ' sort-dim' : '';
-
       const row = document.createElement('div');
-      row.className = 'row ' + rowClass;
+      row.className = 'row ' + (i < 3 ? podiumCls[i] : '');
       row.innerHTML = `
-        <div class="rnk">${rnk}</div>
+        <div class="rnk">${i < 3 ? medals[i] : i + 1}</div>
         <div class="nm">${p.name}</div>
         <div class="pts m${mDim}">${p.m}</div>
         <div class="pts w${wDim}">${p.w}</div>
