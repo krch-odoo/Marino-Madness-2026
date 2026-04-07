@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marino Madness - Composite Standings</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF6B00;
+    --gold: #FFD700;
+    --court: #C8842A;
+    --dark: #0a0a0f;
+    --card: #13131a;
+    --line: rgba(255,255,255,0.07);
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(–dark);
+font-family: ‘Barlow Condensed’, sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+/* Court lines background */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background:
+radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,107,0,0.12) 0%, transparent 70%),
+repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px),
+repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px);
+pointer-events: none;
+z-index: 0;
+}
+
+/* Three-point arc decoration */
+body::after {
+content: ‘’;
+position: fixed;
+top: -200px;
+left: 50%;
+transform: translateX(-50%);
+width: 700px;
+height: 700px;
+border: 2px solid rgba(255,107,0,0.08);
+border-radius: 50%;
+pointer-events: none;
+z-index: 0;
+}
+
+.container {
+position: relative;
+z-index: 1;
+max-width: 680px;
+margin: 0 auto;
+padding: 32px 16px 48px;
+}
+
+/* Header */
+.header {
+text-align: center;
+margin-bottom: 32px;
+animation: fadeDown 0.6s ease both;
+}
+
+.ball-emoji {
+font-size: 48px;
+display: block;
+margin-bottom: 8px;
+animation: bounce 1.2s ease infinite alternate;
+}
+
+@keyframes bounce {
+from { transform: translateY(0); }
+to { transform: translateY(-10px); }
+}
+
+.title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(38px, 8vw, 64px);
+color: #fff;
+letter-spacing: 3px;
+line-height: 1;
+text-shadow: 0 0 40px rgba(255,107,0,0.5);
+}
+
+.subtitle {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(18px, 4vw, 26px);
+color: var(–orange);
+letter-spacing: 6px;
+margin-top: 4px;
+}
+
+.divider {
+display: flex;
+align-items: center;
+gap: 12px;
+margin: 16px auto;
+max-width: 340px;
+}
+.divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(–orange), transparent); }
+.divider-icon { color: var(–gold); font-size: 18px; }
+
+/* Column headers */
+.col-headers {
+display: grid;
+grid-template-columns: 40px 1fr 72px 72px 72px;
+gap: 0 8px;
+padding: 0 16px 8px;
+color: rgba(255,255,255,0.4);
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+animation: fadeDown 0.6s 0.2s ease both;
+}
+.col-headers span:not(:nth-child(2)) { text-align: center; }
+
+/* Rows */
+.row {
+display: grid;
+grid-template-columns: 40px 1fr 72px 72px 72px;
+gap: 0 8px;
+align-items: center;
+padding: 13px 16px;
+background: var(–card);
+border: 1px solid var(–line);
+border-radius: 10px;
+margin-bottom: 6px;
+opacity: 0;
+animation: slideIn 0.4s ease forwards;
+transition: transform 0.2s, border-color 0.2s;
+}
+
+.row:hover {
+transform: translateX(4px);
+border-color: rgba(255,107,0,0.3);
+}
+
+/* Staggered animation */
+.row:nth-child(1)  { animation-delay: 0.30s; }
+.row:nth-child(2)  { animation-delay: 0.36s; }
+.row:nth-child(3)  { animation-delay: 0.42s; }
+.row:nth-child(4)  { animation-delay: 0.48s; }
+.row:nth-child(5)  { animation-delay: 0.54s; }
+.row:nth-child(6)  { animation-delay: 0.60s; }
+.row:nth-child(7)  { animation-delay: 0.66s; }
+.row:nth-child(8)  { animation-delay: 0.72s; }
+.row:nth-child(9)  { animation-delay: 0.78s; }
+.row:nth-child(10) { animation-delay: 0.84s; }
+.row:nth-child(11) { animation-delay: 0.90s; }
+.row:nth-child(12) { animation-delay: 0.96s; }
+.row:nth-child(13) { animation-delay: 1.02s; }
+.row:nth-child(14) { animation-delay: 1.08s; }
+.row:nth-child(15) { animation-delay: 1.14s; }
+.row:nth-child(16) { animation-delay: 1.20s; }
+.row:nth-child(17) { animation-delay: 1.26s; }
+
+/* Podium rows */
+.row.gold   { background: linear-gradient(135deg, #2a200a, #1a1508); border-color: rgba(255,215,0,0.35); }
+.row.silver { background: linear-gradient(135deg, #1a1a22, #13131c); border-color: rgba(192,192,192,0.3); }
+.row.bronze { background: linear-gradient(135deg, #1e1410, #14100d); border-color: rgba(205,127,50,0.3); }
+
+/* You! highlight */
+.row.me {
+background: linear-gradient(135deg, #1a0f00, #0f0800);
+border-color: rgba(255,107,0,0.5);
+box-shadow: 0 0 20px rgba(255,107,0,0.1), inset 0 0 20px rgba(255,107,0,0.05);
+}
+
+.rank {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+color: rgba(255,255,255,0.3);
+text-align: center;
+}
+
+.row.gold .rank   { color: var(–gold); text-shadow: 0 0 12px rgba(255,215,0,0.6); }
+.row.silver .rank { color: #c0c0c0; }
+.row.bronze .rank { color: #cd7f32; }
+
+.medal { font-size: 20px; }
+
+.name {
+font-size: 17px;
+font-weight: 700;
+color: #fff;
+letter-spacing: 0.5px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.row.me .name { color: var(–orange); }
+
+.you-badge {
+font-size: 9px;
+font-weight: 700;
+background: var(–orange);
+color: #fff;
+border-radius: 3px;
+padding: 1px 5px;
+letter-spacing: 1px;
+margin-left: 6px;
+vertical-align: middle;
+}
+
+.pts {
+text-align: center;
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+letter-spacing: 1px;
+}
+.pts.mens   { color: #6aabff; }
+.pts.womens { color: #ff8fab; }
+.pts.total  { color: #fff; font-size: 22px; }
+.row.gold .pts.total   { color: var(–gold); }
+.row.silver .pts.total { color: #ddd; }
+.row.bronze .pts.total { color: #cd7f32; }
+.row.me .pts.total     { color: var(–orange); }
+
+@keyframes slideIn {
+from { opacity: 0; transform: translateX(-20px); }
+to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeDown {
+from { opacity: 0; transform: translateY(-12px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer */
+.footer {
+text-align: center;
+margin-top: 28px;
+color: rgba(255,255,255,0.2);
+font-size: 12px;
+letter-spacing: 2px;
+text-transform: uppercase;
+animation: fadeDown 0.6s 1.4s ease both;
+opacity: 0;
+}
+</style>
+
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <span class="ball-emoji">🏀</span>
+    <div class="title">Marino Madness</div>
+    <div class="subtitle">Composite Standings</div>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-icon">🏆</div>
+      <div class="divider-line"></div>
+    </div>
+  </div>
+
+  <div class="col-headers">
+    <span>RNK</span>
+    <span>Name</span>
+    <span>Men's</span>
+    <span>Wom's</span>
+    <span>Total</span>
+  </div>
+
+  <div id="board"></div>
+
+  <div class="footer">Men's pts 🔵 &nbsp;|&nbsp; Women's pts 🩷 &nbsp;|&nbsp; Combined total ⚪</div>
+</div>
+
+<script>
+const data = [
+  { name: "Sarah",     mens: 121, womens: 122 },
+  { name: "Patrick",   mens: 101, womens: 132 },
+  { name: "Christine", mens: 113, womens: 108 },
+  { name: "Katie",     mens: 93,  womens: 125 },
+  { name: "Chris",     mens: 78,  womens: 136, me: true },
+  { name: "Nicholas",  mens: 82,  womens: 128 },
+  { name: "Taylor",    mens: 85,  womens: 123 },
+  { name: "Kevin",     mens: 75,  womens: 127 },
+  { name: "Alison",    mens: 78,  womens: 120 },
+  { name: "Bryan",     mens: 84,  womens: 114 },
+  { name: "Amanda",    mens: 61,  womens: 122 },
+  { name: "Vincent",   mens: 65,  womens: 117 },
+  { name: "Ball Iz Life Yawn", mens: 83, womens: 92 },
+  { name: "David",     mens: 102, womens: 73  },
+  { name: "Connor",    mens: 86,  womens: 79  },
+  { name: "Jonathan",  mens: 53,  womens: 103 },
+  { name: "Laura",     mens: 56,  womens: 86  },
+];
+
+data.sort((a, b) => (b.mens + b.womens) - (a.mens + a.womens));
+
+const medals = ['🥇','🥈','🥉'];
+const podium = ['gold','silver','bronze'];
+const board = document.getElementById('board');
+
+data.forEach((p, i) => {
+  const total = p.mens + p.womens;
+  const cls = [i < 3 ? podium[i] : '', p.me ? 'me' : ''].filter(Boolean).join(' ');
+  board.innerHTML += `
+    <div class="row ${cls}">
+      <div class="rank">${i < 3 ? medals[i] : i+1}</div>
+      <div class="name">${p.name}${p.me ? '<span class="you-badge">YOU</span>' : ''}</div>
+      <div class="pts mens">${p.mens}</div>
+      <div class="pts womens">${p.womens}</div>
+      <div class="pts total">${total}</div>
+    </div>`;
+});
+</script>
+
+</body>
+</html>
