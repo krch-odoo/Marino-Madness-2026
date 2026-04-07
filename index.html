@@ -4,315 +4,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marino Madness - Composite Standings</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Marino Madness 2026</title>
 <style>
-  :root {
-    --orange: #FF6B00;
-    --gold: #FFD700;
-    --court: #C8842A;
-    --dark: #0a0a0f;
-    --card: #13131a;
-    --line: rgba(255,255,255,0.07);
-  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-- { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-background: var(–dark);
-font-family: ‘Barlow Condensed’, sans-serif;
+html, body {
+background-color: #0a0a0f;
+font-family: ‘Arial Black’, ‘Arial Bold’, Arial, sans-serif;
 min-height: 100vh;
-overflow-x: hidden;
+width: 100%;
 }
 
-/* Court lines background */
-body::before {
-content: ‘’;
-position: fixed;
-inset: 0;
-background:
-radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,107,0,0.12) 0%, transparent 70%),
-repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px),
-repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px);
-pointer-events: none;
-z-index: 0;
-}
-
-/* Three-point arc decoration */
-body::after {
-content: ‘’;
-position: fixed;
-top: -200px;
-left: 50%;
-transform: translateX(-50%);
-width: 700px;
-height: 700px;
-border: 2px solid rgba(255,107,0,0.08);
-border-radius: 50%;
-pointer-events: none;
-z-index: 0;
-}
-
-.container {
-position: relative;
-z-index: 1;
-max-width: 680px;
+.page {
+background-color: #0a0a0f;
+max-width: 480px;
 margin: 0 auto;
-padding: 32px 16px 48px;
+padding: 24px 16px 32px;
+min-height: 100vh;
 }
 
 /* Header */
-.header {
-text-align: center;
-margin-bottom: 32px;
-animation: fadeDown 0.6s ease both;
-}
-
-.ball-emoji {
-font-size: 48px;
-display: block;
-margin-bottom: 8px;
-animation: bounce 1.2s ease infinite alternate;
-}
-
-@keyframes bounce {
-from { transform: translateY(0); }
-to { transform: translateY(-10px); }
-}
-
+.header { text-align: center; margin-bottom: 20px; }
+.ball { font-size: 36px; display: block; margin-bottom: 4px; }
 .title {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: clamp(38px, 8vw, 64px);
-color: #fff;
-letter-spacing: 3px;
-line-height: 1;
-text-shadow: 0 0 40px rgba(255,107,0,0.5);
+font-size: 38px;
+font-weight: 900;
+color: #ffffff;
+letter-spacing: 4px;
+text-transform: uppercase;
+text-shadow: 0 0 28px rgba(255, 107, 0, 0.65);
+line-height: 1.1;
 }
-
 .subtitle {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: clamp(18px, 4vw, 26px);
-color: var(–orange);
-letter-spacing: 6px;
+font-size: 11px;
+font-weight: 700;
+color: #FF6B00;
+letter-spacing: 7px;
+text-transform: uppercase;
 margin-top: 4px;
 }
-
 .divider {
 display: flex;
 align-items: center;
-gap: 12px;
-margin: 16px auto;
-max-width: 340px;
+gap: 10px;
+margin: 12px auto;
+max-width: 260px;
 }
-.divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(–orange), transparent); }
-.divider-icon { color: var(–gold); font-size: 18px; }
+.dl { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #FF6B00, transparent); }
 
 /* Column headers */
-.col-headers {
+.col-h {
 display: grid;
-grid-template-columns: 40px 1fr 72px 72px 72px;
-gap: 0 8px;
-padding: 0 16px 8px;
-color: rgba(255,255,255,0.4);
-font-size: 11px;
+grid-template-columns: 40px 1fr 58px 58px 64px;
+padding: 0 12px 6px;
+color: rgba(255, 255, 255, 0.35);
+font-size: 9px;
 font-weight: 700;
-letter-spacing: 2px;
+letter-spacing: 1.5px;
 text-transform: uppercase;
-animation: fadeDown 0.6s 0.2s ease both;
 }
-.col-headers span:not(:nth-child(2)) { text-align: center; }
+.col-h span { text-align: center; }
+.col-h span.name-col { text-align: left; }
 
 /* Rows */
 .row {
 display: grid;
-grid-template-columns: 40px 1fr 72px 72px 72px;
-gap: 0 8px;
+grid-template-columns: 40px 1fr 58px 58px 64px;
 align-items: center;
-padding: 13px 16px;
-background: var(–card);
-border: 1px solid var(–line);
-border-radius: 10px;
-margin-bottom: 6px;
-opacity: 0;
-animation: slideIn 0.4s ease forwards;
-transition: transform 0.2s, border-color 0.2s;
+padding: 9px 12px;
+background-color: #13131a;
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 8px;
+margin-bottom: 5px;
 }
 
-.row:hover {
-transform: translateX(4px);
-border-color: rgba(255,107,0,0.3);
-}
+.row.gold   { background-color: #1e1608; border-color: rgba(255, 215, 0, 0.45); }
+.row.silver { background-color: #161620; border-color: rgba(192, 192, 192, 0.35); }
+.row.bronze { background-color: #1a1208; border-color: rgba(205, 127, 50, 0.4); }
 
-/* Staggered animation */
-.row:nth-child(1)  { animation-delay: 0.30s; }
-.row:nth-child(2)  { animation-delay: 0.36s; }
-.row:nth-child(3)  { animation-delay: 0.42s; }
-.row:nth-child(4)  { animation-delay: 0.48s; }
-.row:nth-child(5)  { animation-delay: 0.54s; }
-.row:nth-child(6)  { animation-delay: 0.60s; }
-.row:nth-child(7)  { animation-delay: 0.66s; }
-.row:nth-child(8)  { animation-delay: 0.72s; }
-.row:nth-child(9)  { animation-delay: 0.78s; }
-.row:nth-child(10) { animation-delay: 0.84s; }
-.row:nth-child(11) { animation-delay: 0.90s; }
-.row:nth-child(12) { animation-delay: 0.96s; }
-.row:nth-child(13) { animation-delay: 1.02s; }
-.row:nth-child(14) { animation-delay: 1.08s; }
-.row:nth-child(15) { animation-delay: 1.14s; }
-.row:nth-child(16) { animation-delay: 1.20s; }
-.row:nth-child(17) { animation-delay: 1.26s; }
-
-/* Podium rows */
-.row.gold   { background: linear-gradient(135deg, #2a200a, #1a1508); border-color: rgba(255,215,0,0.35); }
-.row.silver { background: linear-gradient(135deg, #1a1a22, #13131c); border-color: rgba(192,192,192,0.3); }
-.row.bronze { background: linear-gradient(135deg, #1e1410, #14100d); border-color: rgba(205,127,50,0.3); }
-
-/* You! highlight */
-.row.me {
-background: linear-gradient(135deg, #1a0f00, #0f0800);
-border-color: rgba(255,107,0,0.5);
-box-shadow: 0 0 20px rgba(255,107,0,0.1), inset 0 0 20px rgba(255,107,0,0.05);
-}
-
-.rank {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
-color: rgba(255,255,255,0.3);
+/* Rank */
+.rnk {
+font-size: 16px;
+font-weight: 900;
+color: rgba(255, 255, 255, 0.35);
 text-align: center;
 }
+.row.gold   .rnk { color: #FFD700; }
+.row.silver .rnk { color: #c0c0c0; }
+.row.bronze .rnk { color: #cd7f32; }
 
-.row.gold .rank   { color: var(–gold); text-shadow: 0 0 12px rgba(255,215,0,0.6); }
-.row.silver .rank { color: #c0c0c0; }
-.row.bronze .rank { color: #cd7f32; }
-
-.medal { font-size: 20px; }
-
-.name {
-font-size: 17px;
+/* Name */
+.nm {
+font-size: 14px;
 font-weight: 700;
-color: #fff;
-letter-spacing: 0.5px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-.row.me .name { color: var(–orange); }
-
-.you-badge {
-font-size: 9px;
-font-weight: 700;
-background: var(–orange);
-color: #fff;
-border-radius: 3px;
-padding: 1px 5px;
-letter-spacing: 1px;
-margin-left: 6px;
-vertical-align: middle;
+color: #ffffff;
+padding-right: 6px;
 }
 
+/* Points */
 .pts {
 text-align: center;
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-letter-spacing: 1px;
+font-size: 14px;
+font-weight: 900;
+color: #ffffff;
 }
-.pts.mens   { color: #6aabff; }
-.pts.womens { color: #ff8fab; }
-.pts.total  { color: #fff; font-size: 22px; }
-.row.gold .pts.total   { color: var(–gold); }
-.row.silver .pts.total { color: #ddd; }
-.row.bronze .pts.total { color: #cd7f32; }
-.row.me .pts.total     { color: var(–orange); }
-
-@keyframes slideIn {
-from { opacity: 0; transform: translateX(-20px); }
-to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes fadeDown {
-from { opacity: 0; transform: translateY(-12px); }
-to   { opacity: 1; transform: translateY(0); }
-}
+.pts.m { color: #6aabff; }
+.pts.w { color: #ff8fab; }
+.pts.t { font-size: 16px; color: #ffffff; }
+.row.gold   .pts.t { color: #FFD700; }
+.row.silver .pts.t { color: #dddddd; }
+.row.bronze .pts.t { color: #cd7f32; }
 
 /* Footer */
 .footer {
 text-align: center;
-margin-top: 28px;
-color: rgba(255,255,255,0.2);
-font-size: 12px;
+margin-top: 16px;
+color: rgba(255, 255, 255, 0.25);
+font-size: 9px;
 letter-spacing: 2px;
 text-transform: uppercase;
-animation: fadeDown 0.6s 1.4s ease both;
-opacity: 0;
 }
 </style>
 
 </head>
 <body>
-<div class="container">
+<div class="page">
+
   <div class="header">
-    <span class="ball-emoji">🏀</span>
+    <span class="ball">🏀</span>
     <div class="title">Marino Madness</div>
     <div class="subtitle">Composite Standings</div>
     <div class="divider">
-      <div class="divider-line"></div>
-      <div class="divider-icon">🏆</div>
-      <div class="divider-line"></div>
+      <div class="dl"></div>
+      <span style="color:#FFD700; font-size:16px;">🏆</span>
+      <div class="dl"></div>
     </div>
   </div>
 
-  <div class="col-headers">
-    <span>RNK</span>
-    <span>Name</span>
+  <div class="col-h">
+    <span></span>
+    <span class="name-col">Name</span>
     <span>Men's</span>
     <span>Wom's</span>
     <span>Total</span>
   </div>
 
-  <div id="board"></div>
+  <div class="row gold">
+    <div class="rnk">🥇</div><div class="nm">Sarah</div>
+    <div class="pts m">121</div><div class="pts w">122</div><div class="pts t">243</div>
+  </div>
+  <div class="row silver">
+    <div class="rnk">🥈</div><div class="nm">Patrick</div>
+    <div class="pts m">101</div><div class="pts w">132</div><div class="pts t">233</div>
+  </div>
+  <div class="row bronze">
+    <div class="rnk">🥉</div><div class="nm">Christine</div>
+    <div class="pts m">113</div><div class="pts w">108</div><div class="pts t">221</div>
+  </div>
+  <div class="row">
+    <div class="rnk">4</div><div class="nm">Katie</div>
+    <div class="pts m">93</div><div class="pts w">125</div><div class="pts t">218</div>
+  </div>
+  <div class="row">
+    <div class="rnk">5</div><div class="nm">Chris</div>
+    <div class="pts m">78</div><div class="pts w">136</div><div class="pts t">214</div>
+  </div>
+  <div class="row">
+    <div class="rnk">6</div><div class="nm">Nicholas</div>
+    <div class="pts m">82</div><div class="pts w">128</div><div class="pts t">210</div>
+  </div>
+  <div class="row">
+    <div class="rnk">7</div><div class="nm">Taylor</div>
+    <div class="pts m">85</div><div class="pts w">123</div><div class="pts t">208</div>
+  </div>
+  <div class="row">
+    <div class="rnk">8</div><div class="nm">Kevin</div>
+    <div class="pts m">75</div><div class="pts w">127</div><div class="pts t">202</div>
+  </div>
+  <div class="row">
+    <div class="rnk">9</div><div class="nm">Alison</div>
+    <div class="pts m">78</div><div class="pts w">120</div><div class="pts t">198</div>
+  </div>
+  <div class="row">
+    <div class="rnk">9</div><div class="nm">Bryan</div>
+    <div class="pts m">84</div><div class="pts w">114</div><div class="pts t">198</div>
+  </div>
+  <div class="row">
+    <div class="rnk">11</div><div class="nm">Amanda</div>
+    <div class="pts m">61</div><div class="pts w">122</div><div class="pts t">183</div>
+  </div>
+  <div class="row">
+    <div class="rnk">12</div><div class="nm">Vincent</div>
+    <div class="pts m">65</div><div class="pts w">117</div><div class="pts t">182</div>
+  </div>
+  <div class="row">
+    <div class="rnk">13</div><div class="nm">Ball Iz Life Yawn</div>
+    <div class="pts m">83</div><div class="pts w">92</div><div class="pts t">175</div>
+  </div>
+  <div class="row">
+    <div class="rnk">13</div><div class="nm">David</div>
+    <div class="pts m">102</div><div class="pts w">73</div><div class="pts t">175</div>
+  </div>
+  <div class="row">
+    <div class="rnk">15</div><div class="nm">Connor</div>
+    <div class="pts m">86</div><div class="pts w">79</div><div class="pts t">165</div>
+  </div>
+  <div class="row">
+    <div class="rnk">16</div><div class="nm">Jonathan</div>
+    <div class="pts m">53</div><div class="pts w">103</div><div class="pts t">156</div>
+  </div>
+  <div class="row">
+    <div class="rnk">17</div><div class="nm">Laura</div>
+    <div class="pts m">56</div><div class="pts w">86</div><div class="pts t">142</div>
+  </div>
 
-  <div class="footer">Men's pts 🔵 &nbsp;|&nbsp; Women's pts 🩷 &nbsp;|&nbsp; Combined total ⚪</div>
+  <div class="footer">🔵 Men's &nbsp;|&nbsp; 🩷 Women's &nbsp;|&nbsp; ⚪ Combined</div>
+
 </div>
-
-<script>
-const data = [
-  { name: "Sarah",     mens: 121, womens: 122 },
-  { name: "Patrick",   mens: 101, womens: 132 },
-  { name: "Christine", mens: 113, womens: 108 },
-  { name: "Katie",     mens: 93,  womens: 125 },
-  { name: "Chris",     mens: 78,  womens: 136, me: true },
-  { name: "Nicholas",  mens: 82,  womens: 128 },
-  { name: "Taylor",    mens: 85,  womens: 123 },
-  { name: "Kevin",     mens: 75,  womens: 127 },
-  { name: "Alison",    mens: 78,  womens: 120 },
-  { name: "Bryan",     mens: 84,  womens: 114 },
-  { name: "Amanda",    mens: 61,  womens: 122 },
-  { name: "Vincent",   mens: 65,  womens: 117 },
-  { name: "Ball Iz Life Yawn", mens: 83, womens: 92 },
-  { name: "David",     mens: 102, womens: 73  },
-  { name: "Connor",    mens: 86,  womens: 79  },
-  { name: "Jonathan",  mens: 53,  womens: 103 },
-  { name: "Laura",     mens: 56,  womens: 86  },
-];
-
-data.sort((a, b) => (b.mens + b.womens) - (a.mens + a.womens));
-
-const medals = ['🥇','🥈','🥉'];
-const podium = ['gold','silver','bronze'];
-const board = document.getElementById('board');
-
-data.forEach((p, i) => {
-  const total = p.mens + p.womens;
-  const cls = [i < 3 ? podium[i] : '', p.me ? 'me' : ''].filter(Boolean).join(' ');
-  board.innerHTML += `
-    <div class="row ${cls}">
-      <div class="rank">${i < 3 ? medals[i] : i+1}</div>
-      <div class="name">${p.name}${p.me ? '<span class="you-badge">YOU</span>' : ''}</div>
-      <div class="pts mens">${p.mens}</div>
-      <div class="pts womens">${p.womens}</div>
-      <div class="pts total">${total}</div>
-    </div>`;
-});
-</script>
-
 </body>
 </html>
