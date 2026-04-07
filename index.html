@@ -23,7 +23,6 @@ padding: 24px 16px 32px;
 min-height: 100vh;
 }
 
-/* Header */
 .header { text-align: center; margin-bottom: 20px; }
 .ball { font-size: 36px; display: block; margin-bottom: 4px; }
 .title {
@@ -63,8 +62,22 @@ font-weight: 700;
 letter-spacing: 1.5px;
 text-transform: uppercase;
 }
-.col-h span { text-align: center; }
-.col-h span.name-col { text-align: left; }
+
+.col-h span {
+text-align: center;
+cursor: pointer;
+padding: 4px 2px;
+border-radius: 4px;
+transition: color 0.2s, background 0.2s;
+user-select: none;
+}
+.col-h span.name-col { text-align: left; cursor: default; }
+.col-h span:not(.name-col):hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
+.col-h span.active-mens   { color: #6aabff; }
+.col-h span.active-womens { color: #ff8fab; }
+.col-h span.active-total  { color: #FFD700; }
+
+.sort-arrow { font-size: 8px; margin-left: 2px; opacity: 0.7; }
 
 /* Rows */
 .row {
@@ -82,7 +95,6 @@ margin-bottom: 5px;
 .row.silver { background-color: #161620; border-color: rgba(192, 192, 192, 0.35); }
 .row.bronze { background-color: #1a1208; border-color: rgba(205, 127, 50, 0.4); }
 
-/* Rank */
 .rnk {
 font-size: 16px;
 font-weight: 900;
@@ -93,7 +105,6 @@ text-align: center;
 .row.silver .rnk { color: #c0c0c0; }
 .row.bronze .rnk { color: #cd7f32; }
 
-/* Name */
 .nm {
 font-size: 14px;
 font-weight: 700;
@@ -101,7 +112,6 @@ color: #ffffff;
 padding-right: 6px;
 }
 
-/* Points */
 .pts {
 text-align: center;
 font-size: 14px;
@@ -115,7 +125,19 @@ color: #ffffff;
 .row.silver .pts.t { color: #dddddd; }
 .row.bronze .pts.t { color: #cd7f32; }
 
-/* Footer */
+.pts.sort-active { opacity: 1; }
+.pts.sort-dim    { opacity: 0.35; }
+
+.sort-label {
+text-align: center;
+font-size: 9px;
+color: rgba(255,255,255,0.2);
+letter-spacing: 1px;
+margin-bottom: 8px;
+text-transform: uppercase;
+}
+.sort-label span { color: #FF6B00; font-weight: 700; }
+
 .footer {
 text-align: center;
 margin-top: 16px;
@@ -133,7 +155,7 @@ text-transform: uppercase;
   <div class="header">
     <span class="ball">🏀</span>
     <div class="title">Marino Madness</div>
-    <div class="subtitle">Composite Standings</div>
+    <div class="subtitle">2026 Standings</div>
     <div class="divider">
       <div class="dl"></div>
       <span style="color:#FFD700; font-size:16px;">🏆</span>
@@ -141,85 +163,99 @@ text-transform: uppercase;
     </div>
   </div>
 
+  <div class="sort-label">Sorted by: <span id="sort-label-text">Combined Total</span></div>
+
   <div class="col-h">
     <span></span>
     <span class="name-col">Name</span>
-    <span>Men's</span>
-    <span>Women's</span>
-    <span>Total</span>
+    <span id="hdr-m" onclick="sortBy('m')">Men's <span class="sort-arrow" id="arr-m"></span></span>
+    <span id="hdr-w" onclick="sortBy('w')">Women's <span class="sort-arrow" id="arr-w"></span></span>
+    <span id="hdr-t" onclick="sortBy('t')" class="active-total">Total <span class="sort-arrow" id="arr-t">▼</span></span>
   </div>
 
-  <div class="row gold">
-    <div class="rnk">🥇</div><div class="nm">Sarah</div>
-    <div class="pts m">121</div><div class="pts w">122</div><div class="pts t">243</div>
-  </div>
-  <div class="row silver">
-    <div class="rnk">🥈</div><div class="nm">Patrick</div>
-    <div class="pts m">101</div><div class="pts w">132</div><div class="pts t">233</div>
-  </div>
-  <div class="row bronze">
-    <div class="rnk">🥉</div><div class="nm">Christine</div>
-    <div class="pts m">113</div><div class="pts w">108</div><div class="pts t">221</div>
-  </div>
-  <div class="row">
-    <div class="rnk">4</div><div class="nm">Katie</div>
-    <div class="pts m">93</div><div class="pts w">125</div><div class="pts t">218</div>
-  </div>
-  <div class="row">
-    <div class="rnk">5</div><div class="nm">Chris</div>
-    <div class="pts m">78</div><div class="pts w">136</div><div class="pts t">214</div>
-  </div>
-  <div class="row">
-    <div class="rnk">6</div><div class="nm">Nicholas</div>
-    <div class="pts m">82</div><div class="pts w">128</div><div class="pts t">210</div>
-  </div>
-  <div class="row">
-    <div class="rnk">7</div><div class="nm">Taylor</div>
-    <div class="pts m">85</div><div class="pts w">123</div><div class="pts t">208</div>
-  </div>
-  <div class="row">
-    <div class="rnk">8</div><div class="nm">Kevin</div>
-    <div class="pts m">75</div><div class="pts w">127</div><div class="pts t">202</div>
-  </div>
-  <div class="row">
-    <div class="rnk">9</div><div class="nm">Alison</div>
-    <div class="pts m">78</div><div class="pts w">120</div><div class="pts t">198</div>
-  </div>
-  <div class="row">
-    <div class="rnk">9</div><div class="nm">Bryan</div>
-    <div class="pts m">84</div><div class="pts w">114</div><div class="pts t">198</div>
-  </div>
-  <div class="row">
-    <div class="rnk">11</div><div class="nm">Amanda</div>
-    <div class="pts m">61</div><div class="pts w">122</div><div class="pts t">183</div>
-  </div>
-  <div class="row">
-    <div class="rnk">12</div><div class="nm">Vincent</div>
-    <div class="pts m">65</div><div class="pts w">117</div><div class="pts t">182</div>
-  </div>
-  <div class="row">
-    <div class="rnk">13</div><div class="nm">Ball Iz Life Yawn</div>
-    <div class="pts m">83</div><div class="pts w">92</div><div class="pts t">175</div>
-  </div>
-  <div class="row">
-    <div class="rnk">13</div><div class="nm">David</div>
-    <div class="pts m">102</div><div class="pts w">73</div><div class="pts t">175</div>
-  </div>
-  <div class="row">
-    <div class="rnk">15</div><div class="nm">Connor</div>
-    <div class="pts m">86</div><div class="pts w">79</div><div class="pts t">165</div>
-  </div>
-  <div class="row">
-    <div class="rnk">16</div><div class="nm">Jonathan</div>
-    <div class="pts m">53</div><div class="pts w">103</div><div class="pts t">156</div>
-  </div>
-  <div class="row">
-    <div class="rnk">17</div><div class="nm">Laura</div>
-    <div class="pts m">56</div><div class="pts w">86</div><div class="pts t">142</div>
-  </div>
+  <div id="board"></div>
 
   <div class="footer">🔵 Men's &nbsp;|&nbsp; 🩷 Women's &nbsp;|&nbsp; ⚪ Combined</div>
 
 </div>
+
+<script>
+  const players = [
+    { name: "Sarah",             m: 121, w: 122 },
+    { name: "Patrick",           m: 101, w: 132 },
+    { name: "Christine",         m: 113, w: 108 },
+    { name: "Katie",             m: 93,  w: 125 },
+    { name: "Chris",             m: 78,  w: 136 },
+    { name: "Nicholas",          m: 82,  w: 128 },
+    { name: "Taylor",            m: 85,  w: 123 },
+    { name: "Kevin",             m: 75,  w: 127 },
+    { name: "Alison",            m: 78,  w: 120 },
+    { name: "Bryan",             m: 84,  w: 114 },
+    { name: "Amanda",            m: 61,  w: 122 },
+    { name: "Vincent",           m: 65,  w: 117 },
+    { name: "Ball Iz Life Yawn", m: 83,  w: 92  },
+    { name: "David",             m: 102, w: 73  },
+    { name: "Connor",            m: 86,  w: 79  },
+    { name: "Jonathan",          m: 53,  w: 103 },
+    { name: "Laura",             m: 56,  w: 86  },
+  ];
+
+  let currentSort = 't';
+  const medals    = ['🥇','🥈','🥉'];
+  const podiumCls = ['gold','silver','bronze'];
+  const labels    = { m: "Men's Bracket", w: "Women's Bracket", t: "Combined Total" };
+
+  function sortBy(key) {
+    currentSort = key;
+    render();
+  }
+
+  function render() {
+    const sorted = [...players].sort((a, b) => {
+      if (currentSort === 't') return (b.m + b.w) - (a.m + a.w);
+      if (currentSort === 'm') return b.m - a.m;
+      if (currentSort === 'w') return b.w - a.w;
+    });
+
+    // Update header styles & arrows
+    ['m','w','t'].forEach(k => {
+      const hdr = document.getElementById('hdr-' + k);
+      const arr = document.getElementById('arr-' + k);
+      const activeClass = k === 'm' ? 'active-mens' : k === 'w' ? 'active-womens' : 'active-total';
+      hdr.className = currentSort === k ? activeClass : '';
+      arr.textContent = currentSort === k ? '▼' : '';
+    });
+
+    document.getElementById('sort-label-text').textContent = labels[currentSort];
+
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+
+    sorted.forEach((p, i) => {
+      const t = p.m + p.w;
+      const rowClass = i < 3 ? podiumCls[i] : '';
+      const rnk = i < 3 ? medals[i] : (i + 1);
+
+      // Dim non-active point columns to make the sort column pop
+      const mDim = currentSort !== 'm' && currentSort !== 't' ? ' sort-dim' : '';
+      const wDim = currentSort !== 'w' && currentSort !== 't' ? ' sort-dim' : '';
+      const tDim = currentSort !== 't' ? ' sort-dim' : '';
+
+      const row = document.createElement('div');
+      row.className = 'row ' + rowClass;
+      row.innerHTML = `
+        <div class="rnk">${rnk}</div>
+        <div class="nm">${p.name}</div>
+        <div class="pts m${mDim}">${p.m}</div>
+        <div class="pts w${wDim}">${p.w}</div>
+        <div class="pts t${tDim}">${t}</div>
+      `;
+      board.appendChild(row);
+    });
+  }
+
+  render();
+</script>
+
 </body>
 </html>
